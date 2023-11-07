@@ -1,0 +1,46 @@
+﻿@page "/"
+
+<h1>Todo List</h1>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" @bind="newTask" placeholder="Enter a new task">
+    <div class="input-group-append">
+        <button class="btn btn-primary" @onclick="AddTask">Add</button>
+    </div>
+</div>
+
+<ul>
+    @foreach (var task in tasks)
+    {
+            <li>
+                <input type="checkbox" @bind="task.IsCompleted" /> @task.Description
+                <button class="btn btn-danger btn-sm" @onclick="() => RemoveTask(task)">Remove</button>
+            </li>
+    }
+</ul>
+
+@code {
+    private string newTask;
+
+    private List<TaskItem> tasks = new List<TaskItem>();
+
+    private class TaskItem
+    {
+        public string Description { get; set; }
+        public bool IsCompleted { get; set; }
+    }
+
+    private void AddTask()
+    {
+        if (!string.IsNullOrWhiteSpace(newTask))
+        {
+            tasks.Add(new TaskItem { Description = newTask, IsCompleted = false });
+            newTask = string.Empty;
+        }
+    }
+
+    private void RemoveTask(TaskItem task)
+    {
+        tasks.Remove(task);
+    }
+}
